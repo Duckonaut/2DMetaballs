@@ -28,6 +28,8 @@ namespace Metaballs
 			Velocity = new Vector2((float)Math.Cos(Main.offset) * (float)Math.Sin(rotationConst) * 0.2f + rotationConst * 0.1f, (float)Math.Sin(Main.offset) * (float)Math.Cos(rotationConst) * 0.2f - rotationConst * 0.1f).RotatedBy(rotationConst);
 
 			Position += Velocity;
+
+			Position = new Vector2(Position.X % Main.WindowBounds.Width, Position.Y % Main.WindowBounds.Height);
 		}
 
 		public void Draw(SpriteBatch sB)

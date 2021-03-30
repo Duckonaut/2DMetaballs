@@ -30,7 +30,7 @@ namespace Metaballs
 
 		public static bool Back => KeyboardClick(Keys.Escape);
 
-		public static Point MousePos => CurrentMouseState.Position;
+		public static Vector2 MousePos => CurrentMouseState.Position.ToVector2() / 2;
 		public static bool MouseClick => CurrentMouseState.LeftButton == ButtonState.Pressed && PastMouseState.LeftButton == ButtonState.Released;
 		public static bool MouseHold => CurrentMouseState.LeftButton == ButtonState.Pressed;
 

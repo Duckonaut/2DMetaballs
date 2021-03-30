@@ -15,7 +15,7 @@ namespace Metaballs
 		SpriteBatch spriteBatch;
 
 		public static Random Rand { get; protected set; }
-		public static Rectangle WindowBounds { get; set; }
+		public static Rectangle WindowBounds;
 		public static RenderTarget2D MetaballTarget { get; set; }
 		public static RenderTarget2D TmpTarget { get; set; }
 		public static Texture2D Mask { get; set; }
@@ -29,6 +29,18 @@ namespace Metaballs
 			graphics = new GraphicsDeviceManager(this);
 			graphics.GraphicsProfile = GraphicsProfile.HiDef;
 			Content.RootDirectory = "Content";
+			Window.AllowUserResizing = true;
+			Window.ClientSizeChanged += WindowSizeChange;
+		}
+
+		private void WindowSizeChange(object sender = null, EventArgs e = null)
+		{
+			WindowBounds = Window.ClientBounds;
+			WindowBounds.Width /= 2;
+			WindowBounds.Height /= 2;
+
+			MetaballTarget = new RenderTarget2D(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
+			TmpTarget = new RenderTarget2D(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
 		}
 
 		/// <summary>
@@ -40,10 +52,7 @@ namespace Metaballs
 		protected override void Initialize()
 		{
 			Rand = new Random();
-			WindowBounds = Window.ClientBounds;
-
-			MetaballTarget = new RenderTarget2D(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
-			TmpTarget = new RenderTarget2D(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
+			WindowSizeChange();
 
 			Metaballs = new List<Metaball>();
 
@@ -88,7 +97,7 @@ namespace Metaballs
 
 			if (Input.MouseHold)
 			{
-				Metaballs.Add(new Metaball(Input.MousePos.ToVector2(), 0.5f + (float)Rand.NextDouble()));
+				Metaballs.Add(new Metaball(Input.MousePos, 0.5f + (float)Rand.NextDouble()));
 			}
 
 
@@ -121,7 +130,7 @@ namespace Metaballs
 				m.Draw(spriteBatch);
 			}
 
-			spriteBatch.Draw(Mask, Input.MousePos.ToVector2(), null, Color.White, 0f, Vector2.One * 256f, 1f / 32f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Mask, Input.MousePos, null, Color.White, 0f, Vector2.One * 256f, 1f / 32f, SpriteEffects.None, 0);
 
 
 			spriteBatch.End();
