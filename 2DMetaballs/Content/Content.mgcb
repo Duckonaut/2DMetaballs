@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin BorderNoise.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:BorderNoise.fx
+
 #begin Galaxy.png
 /importer:TextureImporter
 /processor:TextureProcessor

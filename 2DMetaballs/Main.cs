@@ -23,6 +23,7 @@ namespace Metaballs
 		public static List<Metaball> Metaballs { get; set; }
 
 		private Effect metaballEffect;
+		public static Effect borderNoise;
 		public static float offset = 0f;
 		public Main()
 		{
@@ -71,6 +72,7 @@ namespace Metaballs
 			Mask = Content.Load<Texture2D>("Mask");
 			Galaxy = Content.Load<Texture2D>("Galaxy");
 			metaballEffect = Content.Load<Effect>("MetaballEffect");
+			borderNoise = Content.Load<Effect>("BorderNoise");
 		}
 
 		/// <summary>
@@ -123,7 +125,8 @@ namespace Metaballs
 		{
 			GraphicsDevice.SetRenderTarget(MetaballTarget);
 			GraphicsDevice.Clear(Color.Transparent);
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp);
+
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, effect: Main.borderNoise);
 
 			foreach (var m in Metaballs)
 			{

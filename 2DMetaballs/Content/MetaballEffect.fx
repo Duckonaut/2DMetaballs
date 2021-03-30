@@ -1,6 +1,6 @@
 ﻿const float4 black = float4(0.0, 0.0, 0.0, 0.0);
 const float4 white = float4(1.0, 1.0, 1.0, 1.0);
-const float edge = 0.00001f;
+const float edge = 0.25f;
 
 sampler2D SpriteTextureSampler;
 
@@ -40,19 +40,19 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     nearby[2] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(-1, 0))).r;
     nearby[3] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(0, -1))).r;
 
-    if (nearby[0] > edge && nearby[2] < edge)
+    if (nearby[0] > edge && color.r <= edge)
     {
         return white;
     }
-    else if (nearby[0] < edge && nearby[2] > edge)
+    else if (nearby[1] > edge && color.r <= edge)
     {
         return white;
     }
-    else if (nearby[1] > edge && nearby[3] < edge)
+    else if (nearby[2] > edge && color.r <= edge)
     {
         return white;
     }
-    else if (nearby[1] < edge && nearby[3] > edge)
+    else if (nearby[3] > edge && color.r <= edge)
     {
         return white;
     }

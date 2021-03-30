@@ -34,6 +34,8 @@ namespace Metaballs
 
 		public void Draw(SpriteBatch sB)
 		{
+			Main.borderNoise.Parameters["offset"].SetValue(Main.offset * (1f + rotationConst * 0.2f));
+
 			sB.Draw(Main.Mask, Position, null, Color.White, 0f, Vector2.One * 256f, Scale / 16f, SpriteEffects.None, 0);
 		}
 	}
