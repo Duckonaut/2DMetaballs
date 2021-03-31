@@ -63,7 +63,11 @@ namespace Metaballs
 
 			sB.End();
 
-			AddEffect(sB, graphicsDevice, metaballColorCode);
+
+			if (!Input.Right)
+			{
+				AddEffect(sB, graphicsDevice, metaballColorCode);
+			}
 
 			sB.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, effect: null);
 
