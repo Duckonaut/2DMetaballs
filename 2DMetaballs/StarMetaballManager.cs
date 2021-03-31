@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Metaballs
 {
-	public class Starjizz
+	public class StarMetaballManager
 	{
 		public List<IMetaball> MetaballsToDraw { get; protected set; }
 		public List<IGalaxySprite> SpritesToDraw { get; protected set; }
@@ -22,7 +22,7 @@ namespace Metaballs
 		public Effect borderNoise;
 		private Effect galaxyParallax;
 
-		public Starjizz()
+		public StarMetaballManager()
 		{
 			MetaballsToDraw = new List<IMetaball>();
 			SpritesToDraw = new List<IGalaxySprite>();

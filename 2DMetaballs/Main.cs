@@ -18,7 +18,7 @@ namespace Metaballs
 		public static Rectangle WindowBounds;
 		public static Texture2D Mask { get; set; }
 		public static Texture2D Starachnid { get; set; }
-		public static Starjizz Starjizz { get; set; }
+		public static StarMetaballManager Starjizz { get; set; }
 		public static List<Metaball> Metaballs { get; set; }
 
 		public static float offset = 0f;
@@ -30,7 +30,7 @@ namespace Metaballs
 			graphics.GraphicsProfile = GraphicsProfile.HiDef;
 			Content.RootDirectory = "Content";
 			Window.AllowUserResizing = true;
-			Starjizz = new Starjizz();
+			Starjizz = new StarMetaballManager();
 
 			Window.ClientSizeChanged += WindowSizeChange;
 		}
@@ -56,7 +56,7 @@ namespace Metaballs
 			WindowSizeChange();
 
 			Metaballs = new List<Metaball>();
-			Starjizz = new Starjizz();
+			Starjizz = new StarMetaballManager();
 			Starjizz.Initialize(GraphicsDevice);
 
 			s = new Starachnid();
