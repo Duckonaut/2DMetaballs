@@ -16,22 +16,22 @@ namespace Metaballs
 
 		public static Random Rand { get; protected set; }
 		public static Rectangle WindowBounds;
-		public static RenderTarget2D MetaballTarget { get; set; }
-		public static RenderTarget2D TmpTarget { get; set; }
 		public static Texture2D Mask { get; set; }
-		public static Texture2D Galaxy { get; set; }
+		public static Texture2D Starachnid { get; set; }
+		public static Starjizz Starjizz { get; set; }
 		public static List<Metaball> Metaballs { get; set; }
 
-		private Effect metaballEdgeDetection;
-		public static Effect borderNoise;
-		public static Effect galaxyParallax;
 		public static float offset = 0f;
+
+		private Starachnid s;
 		public Main()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			graphics.GraphicsProfile = GraphicsProfile.HiDef;
 			Content.RootDirectory = "Content";
 			Window.AllowUserResizing = true;
+			Starjizz = new Starjizz();
+
 			Window.ClientSizeChanged += WindowSizeChange;
 		}
 
@@ -41,8 +41,7 @@ namespace Metaballs
 			WindowBounds.Width /= 2;
 			WindowBounds.Height /= 2;
 
-			MetaballTarget = new RenderTarget2D(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
-			TmpTarget = new RenderTarget2D(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
+			Starjizz.UpdateWindowSize(GraphicsDevice, WindowBounds.Width, WindowBounds.Height);
 		}
 
 		/// <summary>
@@ -57,6 +56,10 @@ namespace Metaballs
 			WindowSizeChange();
 
 			Metaballs = new List<Metaball>();
+			Starjizz = new Starjizz();
+			Starjizz.Initialize(GraphicsDevice);
+
+			s = new Starachnid();
 
 			base.Initialize();
 		}
@@ -71,10 +74,8 @@ namespace Metaballs
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			Mask = Content.Load<Texture2D>("Mask");
-			Galaxy = Content.Load<Texture2D>("Galaxy");
-			metaballEdgeDetection = Content.Load<Effect>("MetaballEdgeDetection");
-			borderNoise = Content.Load<Effect>("BorderNoise");
-			galaxyParallax = Content.Load<Effect>("GalaxyParallax");
+			Starachnid = Content.Load<Texture2D>("Starachnid");
+			Starjizz.LoadContent(Content);
 		}
 
 		/// <summary>
@@ -109,7 +110,7 @@ namespace Metaballs
 			{
 				m.Update();
 			}
-
+			s.Update();
 			offset += 0.01f;
 
 
@@ -125,75 +126,15 @@ namespace Metaballs
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.SetRenderTarget(MetaballTarget);
-			GraphicsDevice.Clear(Color.Transparent);
-
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, effect: Main.borderNoise);
-
-			foreach (var m in Metaballs)
-			{
-				m.Draw(spriteBatch);
-			}
-
-			spriteBatch.Draw(Mask, Input.MousePos, null, Color.White, 0f, Vector2.One * 256f, 1f / 20f, SpriteEffects.None, 0);
-
-
-			spriteBatch.End();
-
-			if (!Input.CurrentState.IsKeyDown(Keys.D))
-			{
-				metaballEdgeDetection.Parameters["width"].SetValue((float)WindowBounds.Width);
-				metaballEdgeDetection.Parameters["height"].SetValue((float)WindowBounds.Height);
-				AddEffect(metaballEdgeDetection);
-			}
-
-			if (!Input.CurrentState.IsKeyDown(Keys.F))
-			{
-				galaxyParallax.Parameters["screenWidth"].SetValue((float)WindowBounds.Width);
-				galaxyParallax.Parameters["screenHeight"].SetValue((float)WindowBounds.Height);
-				galaxyParallax.Parameters["width"].SetValue((float)Galaxy.Width);
-				galaxyParallax.Parameters["height"].SetValue((float)Galaxy.Height);
-				galaxyParallax.Parameters["GalaxyTexture"].SetValue(Galaxy);
-				galaxyParallax.Parameters["offset"].SetValue(new Vector2((float)Math.Sin(offset) * 0.2f + Input.MousePos.X, (float)Math.Cos(offset) * 0.2f + Input.MousePos.Y) * 0.1f);
-				AddEffect(galaxyParallax);
-			}
-
+			Starjizz.DrawToTarget(spriteBatch, GraphicsDevice);
 
 			GraphicsDevice.SetRenderTarget(null);
 
 			GraphicsDevice.Clear(Color.Black);
 
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.CreateScale(2));
-
-			spriteBatch.Draw(MetaballTarget, Vector2.Zero, null, Color.White, 0, new Vector2(0, 0), 1f, SpriteEffects.None, 0);
-
-			spriteBatch.End();
-
+			Starjizz.Draw(spriteBatch);
 
 			base.Draw(gameTime);
-		}
-
-		private void AddEffect(Effect effect)
-		{
-			GraphicsDevice.SetRenderTarget(TmpTarget);
-			GraphicsDevice.Clear(Color.Black);
-
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, effect: effect, samplerState: SamplerState.PointClamp);
-
-			//effect.CurrentTechnique.Passes[0].Apply();
-
-			spriteBatch.Draw(MetaballTarget, position: Vector2.Zero, color: Color.White);
-
-			spriteBatch.End();
-
-			GraphicsDevice.SetRenderTarget(MetaballTarget);
-			GraphicsDevice.Clear(Color.Black);
-
-			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, effect: null, samplerState: SamplerState.PointClamp);
-
-			spriteBatch.Draw(TmpTarget, position: Vector2.Zero, color: Color.White);
-
-			spriteBatch.End();
 		}
 	}
 }

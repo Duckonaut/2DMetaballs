@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace Metaballs
 {
-	public class Metaball
+	public class Metaball: IMetaball
 	{
 		public Metaball(Vector2 position, float scale)
 		{
 			Position = position;
 			Scale = scale;
 			rotationConst = (float)Main.Rand.NextDouble() * 6.28f;
+
+			Main.Starjizz.MetaballsToDraw.Add(this);
 		}
 
 		public Vector2 Position { get; set; }
@@ -41,9 +43,9 @@ namespace Metaballs
 			Position = new Vector2((Position.X + Main.WindowBounds.Width) % Main.WindowBounds.Width, (Position.Y + Main.WindowBounds.Height) % Main.WindowBounds.Height);
 		}
 
-		public void Draw(SpriteBatch sB)
+		public void DrawOnMetaballLayer(SpriteBatch sB)
 		{
-			Main.borderNoise.Parameters["offset"].SetValue(Main.offset * (1f + rotationConst * 0.2f));
+			Main.Starjizz.borderNoise.Parameters["offset"].SetValue(Main.offset + rotationConst);
 
 			sB.Draw(Main.Mask, Position, null, Color.White, 0f, Vector2.One * 256f, Scale / 16f, SpriteEffects.None, 0);
 		}

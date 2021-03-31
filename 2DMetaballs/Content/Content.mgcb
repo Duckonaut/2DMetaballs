@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:Mask.png
 
+#begin MetaballColorCode.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:MetaballColorCode.fx
+
 #begin MetaballEdgeDetection.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -66,4 +72,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SquareMask.png
+
+#begin Starachnid.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Starachnid.png
 

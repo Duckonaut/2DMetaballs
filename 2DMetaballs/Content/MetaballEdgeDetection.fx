@@ -1,7 +1,6 @@
 ﻿const float4 black = float4(0.0, 0.0, 0.0, 0.0);
 const float4 white = float4(1.0, 1.0, 1.0, 1.0);
 const float4 codedColor = float4(0.0, 1.0, 0.0, 1.0);
-const float edge = 0.4f;
 
 sampler2D SpriteTextureSampler;
 
@@ -28,34 +27,29 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
     float2 pos = float2(input.TextureCoordinates.x * width, input.TextureCoordinates.y * height);
 
-    nearby[0] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(1, 0))).r;
-    nearby[1] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(0, 1))).r;
-    nearby[2] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(-1, 0))).r;
-    nearby[3] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(0, -1))).r;
+    nearby[0] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(1, 0))).g;
+    nearby[1] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(0, 1))).g;
+    nearby[2] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(-1, 0))).g;
+    nearby[3] = tex2D(SpriteTextureSampler, scaleBack(pos + float2(0, -1))).g;
 
-    if (nearby[0] > edge && color.r <= edge)
+    if (nearby[0] == 1.0 && color.g < 1.0)
     {
         return white;
     }
-    else if (nearby[1] > edge && color.r <= edge)
+    else if (nearby[1] == 1.0 && color.g < 1.0)
     {
         return white;
     }
-    else if (nearby[2] > edge && color.r <= edge)
+    else if (nearby[2] == 1.0 && color.g < 1.0)
     {
         return white;
     }
-    else if (nearby[3] > edge && color.r <= edge)
+    else if (nearby[3] == 1.0 && color.g < 1.0)
     {
         return white;
-    }
-
-    if (color.r > edge)
-    {
-        return codedColor;
     }
 
-    return black;
+    return color;
 }
 
 technique SpriteDrawing
