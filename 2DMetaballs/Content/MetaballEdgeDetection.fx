@@ -1,19 +1,12 @@
 ﻿const float4 black = float4(0.0, 0.0, 0.0, 0.0);
 const float4 white = float4(1.0, 1.0, 1.0, 1.0);
-const float edge = 0.25f;
+const float4 codedColor = float4(0.0, 1.0, 0.0, 1.0);
+const float edge = 0.4f;
 
 sampler2D SpriteTextureSampler;
 
-Texture2D GalaxyTexture;
-
-sampler2D GalaxySampler = sampler_state
-{
-    Texture = <GalaxyTexture>;
-};
-
 float width;
 float height;
-float2 offset;
 
 struct VertexShaderOutput
 {
@@ -59,7 +52,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
 
     if (color.r > edge)
     {
-        return tex2D(GalaxySampler, input.TextureCoordinates + offset);
+        return codedColor;
     }
 
     return black;

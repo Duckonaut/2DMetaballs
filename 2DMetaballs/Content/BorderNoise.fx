@@ -16,7 +16,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     float angle = atan2(pos.y, pos.x);
 
     float delta = sin((angle + offset * 0.2) * 4) * 2;
-    delta -= cos((angle - offset * 0.6) * 7);
+    delta -= cos((angle - offset * 0.6) * 7) * 1.2f;
 
     pos *= 1 + delta * 0.02;
 

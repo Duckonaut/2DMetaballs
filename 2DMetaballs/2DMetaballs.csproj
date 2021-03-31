@@ -57,7 +57,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\BorderNoise.fx" />
-    <Content Include="Content\MetaballEffect.fx" />
+    <Content Include="Content\MetaballEdgeDetection.fx" />
+    <Content Include="Content\GalaxyParallax.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

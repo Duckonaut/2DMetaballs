@@ -22,8 +22,9 @@ namespace Metaballs
 		public static Texture2D Galaxy { get; set; }
 		public static List<Metaball> Metaballs { get; set; }
 
-		private Effect metaballEffect;
+		private Effect metaballEdgeDetection;
 		public static Effect borderNoise;
+		public static Effect galaxyParallax;
 		public static float offset = 0f;
 		public Main()
 		{
@@ -71,8 +72,9 @@ namespace Metaballs
 
 			Mask = Content.Load<Texture2D>("Mask");
 			Galaxy = Content.Load<Texture2D>("Galaxy");
-			metaballEffect = Content.Load<Effect>("MetaballEffect");
+			metaballEdgeDetection = Content.Load<Effect>("MetaballEdgeDetection");
 			borderNoise = Content.Load<Effect>("BorderNoise");
+			galaxyParallax = Content.Load<Effect>("GalaxyParallax");
 		}
 
 		/// <summary>
@@ -133,17 +135,28 @@ namespace Metaballs
 				m.Draw(spriteBatch);
 			}
 
-			spriteBatch.Draw(Mask, Input.MousePos, null, Color.White, 0f, Vector2.One * 256f, 1f / 32f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Mask, Input.MousePos, null, Color.White, 0f, Vector2.One * 256f, 1f / 20f, SpriteEffects.None, 0);
 
 
 			spriteBatch.End();
 
-			metaballEffect.Parameters["width"].SetValue((float)WindowBounds.Width);
-			metaballEffect.Parameters["height"].SetValue((float)WindowBounds.Height);
-			metaballEffect.Parameters["GalaxyTexture"].SetValue(Galaxy);
-			metaballEffect.Parameters["offset"].SetValue(new Vector2((float)Math.Sin(offset), (float)Math.Cos(offset)) * 0.1f);
-			AddEffect(metaballEffect);
+			if (!Input.CurrentState.IsKeyDown(Keys.D))
+			{
+				metaballEdgeDetection.Parameters["width"].SetValue((float)WindowBounds.Width);
+				metaballEdgeDetection.Parameters["height"].SetValue((float)WindowBounds.Height);
+				AddEffect(metaballEdgeDetection);
+			}
 
+			if (!Input.CurrentState.IsKeyDown(Keys.F))
+			{
+				galaxyParallax.Parameters["screenWidth"].SetValue((float)WindowBounds.Width);
+				galaxyParallax.Parameters["screenHeight"].SetValue((float)WindowBounds.Height);
+				galaxyParallax.Parameters["width"].SetValue((float)Galaxy.Width);
+				galaxyParallax.Parameters["height"].SetValue((float)Galaxy.Height);
+				galaxyParallax.Parameters["GalaxyTexture"].SetValue(Galaxy);
+				galaxyParallax.Parameters["offset"].SetValue(new Vector2((float)Math.Sin(offset) * 0.2f + Input.MousePos.X, (float)Math.Cos(offset) * 0.2f + Input.MousePos.Y) * 0.1f);
+				AddEffect(galaxyParallax);
+			}
 
 
 			GraphicsDevice.SetRenderTarget(null);

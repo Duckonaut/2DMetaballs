@@ -27,9 +27,18 @@ namespace Metaballs
 		{
 			Velocity = new Vector2((float)Math.Cos(Main.offset) * (float)Math.Sin(rotationConst) * 0.2f + rotationConst * 0.1f, (float)Math.Sin(Main.offset) * (float)Math.Cos(rotationConst) * 0.2f - rotationConst * 0.1f).RotatedBy(rotationConst);
 
+			if (Input.Down)
+			{
+				Vector2 delta = Input.MousePos - Position;
+				float lenSquared = delta.LengthSquared();
+				delta.Normalize();
+
+				Velocity += delta * lenSquared * 0.01f;
+			}
+
 			Position += Velocity;
 
-			Position = new Vector2(Position.X % Main.WindowBounds.Width, Position.Y % Main.WindowBounds.Height);
+			Position = new Vector2((Position.X + Main.WindowBounds.Width) % Main.WindowBounds.Width, (Position.Y + Main.WindowBounds.Height) % Main.WindowBounds.Height);
 		}
 
 		public void Draw(SpriteBatch sB)
